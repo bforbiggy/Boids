@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 141521759}
   - component: {fileID: 141521758}
   m_Layer: 0
-  m_Name: field gondola
+  m_Name: Field Gondola
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

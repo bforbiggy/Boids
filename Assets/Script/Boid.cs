@@ -5,30 +5,32 @@ using static DataHub;
 
 public class Boid : MonoBehaviour
 {
-    public const float defaultSpeed = 0.5f;
-    public Rigidbody2D m_rigidbody;
-
-    public float m_angle = 0f; // CURRENT ANGLE IN RADIANS
+    public class BoidData
+    {
+        public Vector3 collision;
+    }
+    public BoidData data = null;
 
     [Range(2f, 6f)]
-    public float scanRange = 4.7f;
-    public GameObject scanArea;
+    public float collisionScanRange = 4.7f;
+
+    public Vector2 velocity;
+    public float angle;
 
     void Start()
     {
         // Set boid random initial velocity and position
         SetVelocity(Random.Range(0f, 360f) / 180 * Mathf.PI);
-        transform.position += new Vector3(Random.Range(-10, 10), Random.Range(-4, 4));
+        transform.position += new Vector3(Random.Range(-9, 9), Random.Range(-5, 5));
     }
 
     // Given an angle (in radians), set boid in that direction
-    void SetVelocity(float angleRad, float speed = defaultSpeed)
+    void SetVelocity(float angleRad, float speed = (minSpeed + maxSpeed)/2)
     {
         // Set boid to move in given direction with default speed
-        m_rigidbody.velocity = new Vector2(Mathf.Cos(angleRad) * speed, Mathf.Sin(angleRad) * speed);
+        velocity = AngleSpeedToVector(angleRad, speed);
 
         // Rotate boid to face direction it is going in
-        m_angle = angleRad;
         float rotationAmount = angleRad * 180 / Mathf.PI + 180;
         transform.rotation = Quaternion.Euler(0, 0, rotationAmount);
 
@@ -39,26 +41,29 @@ public class Boid : MonoBehaviour
 
     Vector3 SteerForce(Vector3 vector)
     {
-        Vector3 direction = vector.normalized * defaultSpeed - (Vector3)m_rigidbody.velocity;
+        Vector3 direction = vector.normalized * maxSpeed - (Vector3)velocity;
         return Vector3.ClampMagnitude(direction, maxSteerForce);
     }
 
     void Update()
     {
-        // DEBUG: MAKE CYLINDER MATCH SCAN AREA
-        scanArea.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-        scanArea.transform.localScale = new Vector3(scanRange, 1, scanRange);
-        scanArea.transform.position = transform.position - new Vector3(0f, 0f, -10f);
+        Vector3 acceleration = Vector3.zero;
 
-        // Move away from nearby collidable objects
-        foreach (Boid boid in boids)
-        {
-            // Detect collisions and avoid them by steering away
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, m_rigidbody.velocity);
+        #region Collision
+        
 
-            // Seperation
-            // Cohesion
-            // Alignment
-        }
+        /*
+        Vector3 collisionAvoidDir = ObstacleRays();
+        Vector3 collisionAvoidForce = SteerTowards(collisionAvoidDir) * settings.avoidCollisionWeight;
+        acceleration += collisionAvoidForce;
+        */
+        #endregion
+
+        // Seperation
+        // Cohesion
+        // Alignment
+
+        // After calculating velocity, move the boid
+        transform.position += (Vector3)velocity * Time.deltaTime;
     }
 }
