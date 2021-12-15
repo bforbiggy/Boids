@@ -49,27 +49,30 @@ public class BoidManager : MonoBehaviour
             BoidData data = new BoidData();
 
             #region Collision Avoidance
-            float variation = 135/(collisionDensity/2f);
+            int signFlip = -1;
 
             // Pick first direction that doesn't collide with terrain
             for (int i = 0; i < collisionDensity; i++)
             {
                 // Vary angle with each raycast
-                float angle = boid.angle * (i*variation);
-                Vector3 ccwDirection = AngleSpeedToVector(boid.angle);
-                Vector3 cwDirection = AngleSpeedToVector(-boid.angle);
+                float angleChange = signFlip * (i*10);
+                Vector3 direction = boid.direction;
+                direction = Quaternion.Euler(0f, 0f, angleChange) * direction;
+
+                // Check for collision
+                RaycastHit2D hit = Physics2D.Raycast(boid.transform.position, direction, Mathf.Infinity, envMask);
 
                 // If chosen direction doesn't head to terrain, we pick said direction
-                if (!Physics2D.Raycast(boid.transform.position, ccwDirection, collisionScanRange))
+                if (hit.collider == null)
                 {
-                    data.avoidCollisionDir = ccwDirection;
+                    Debug.DrawLine(boid.transform.position, boid.transform.position + direction, Color.white, 0.1f);
+                    data.avoidCollisionDir = boid.direction;
                     break;
                 }
-                if(!Physics2D.Raycast(boid.transform.position, cwDirection, collisionScanRange))
-                {
-                    data.avoidCollisionDir = cwDirection;
-                    break;
-                }
+                else
+                    Debug.DrawLine(boid.transform.position, boid.transform.position + direction, Color.red, 0.1f);
+
+                signFlip *= -1;
             }
             #endregion
 

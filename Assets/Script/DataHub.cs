@@ -7,8 +7,9 @@ public static class DataHub
     public static RaycastHit blank = new RaycastHit();
 
     // Collision Detection Variables
-    public static int collisionScanRange = 3;
+    public static int collisionScanRange = 1;
     public static int collisionDensity = 20;
+    public static int envMask = LayerMask.GetMask("Environment");
 
     // Boid movement calculation values
     public const float minSpeed = 0.3f;

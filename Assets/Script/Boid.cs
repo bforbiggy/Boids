@@ -16,8 +16,8 @@ public class Boid : MonoBehaviour
     public float collisionScanRange = 4.7f;
 
     // Movement fields
-    public Vector2 velocity;
-    public Vector2 direction;
+    public Vector3 velocity;
+    public Vector3 direction;
     public float angle;
 
     void Start()
@@ -50,7 +50,7 @@ public class Boid : MonoBehaviour
         //Orientate();
 
         // Calculate velocity given acceleration
-        velocity += (Vector2)acceleration * Time.deltaTime;
+        velocity += acceleration * Time.deltaTime;
 
         float speed = velocity.magnitude;
         speed = Mathf.Clamp(speed, minSpeed, maxSpeed);
@@ -58,9 +58,9 @@ public class Boid : MonoBehaviour
         velocity = direction * speed;
 
         // Calculate angle 
-        float signedAngle = Vector2.SignedAngle(Vector2.zero, velocity);
+        float signedAngle = Vector2.SignedAngle(Vector2.up, direction);
         if(signedAngle < 0)
-            signedAngle = Mathf.Abs(signedAngle) + 180;
+            signedAngle = 360 + signedAngle;
         angle = signedAngle;
 
         // Move boid
