@@ -215,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 341314054}
   - component: {fileID: 341314055}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Right Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 471591357}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1395277500}
   - component: {fileID: 1395277501}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bottom Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1608302128}
   - component: {fileID: 1608302129}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Left Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1679411337}
   - component: {fileID: 1679411338}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Top Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -580,7 +580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boidBase: {fileID: 6694799528086527595, guid: 0042d787306bbe845afc0007eb955181, type: 3}
-  boidCount: 40
+  boidCount: 43
 --- !u!4 &2058966986
 Transform:
   m_ObjectHideFlags: 0

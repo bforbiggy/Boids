@@ -10,8 +10,13 @@ public class BoidManager : MonoBehaviour
 
     private int oldBoidCount = 0;
     [Range(0,100)]
-    public int boidCount = 40;
+    public int boidCount = 10;
     private static List<Boid> boids = new List<Boid>();
+
+    void Start()
+    {
+
+    }
 
     void Update()
     {
@@ -44,17 +49,26 @@ public class BoidManager : MonoBehaviour
             BoidData data = new BoidData();
 
             #region Collision Avoidance
-            RaycastHit closest = blank;
+            float variation = 135/(collisionDensity/2f);
 
-            // Detect closest collidable terrain
-            closest.distance = Mathf.Infinity;
+            // Pick first direction that doesn't collide with terrain
             for (int i = 0; i < collisionDensity; i++)
             {
-                Vector3 vectorDirection = AngleSpeedToVector(boid.angle);
-                RaycastHit hitData;
-                if (Physics.Raycast(transform.position, vectorDirection, out hitData) && hitData.distance < closest.distance)
+                // Vary angle with each raycast
+                float angle = boid.angle * (i*variation);
+                Vector3 ccwDirection = AngleSpeedToVector(boid.angle);
+                Vector3 cwDirection = AngleSpeedToVector(-boid.angle);
+
+                // If chosen direction doesn't head to terrain, we pick said direction
+                if (!Physics2D.Raycast(boid.transform.position, ccwDirection, collisionScanRange))
                 {
-                    closest = hitData;
+                    data.avoidCollisionDir = ccwDirection;
+                    break;
+                }
+                if(!Physics2D.Raycast(boid.transform.position, cwDirection, collisionScanRange))
+                {
+                    data.avoidCollisionDir = cwDirection;
+                    break;
                 }
             }
             #endregion
