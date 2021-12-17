@@ -39,19 +39,19 @@ public class Boid : MonoBehaviour
     {
         Vector3 acceleration = Vector3.zero;
 
-        #region Collision
-        //Vector3 collisionAvoidForce = SteerForce(data.avoidCollisionDir) * avoidCollisionWeight;
-        //acceleration += collisionAvoidForce;
-        #endregion
+        // Collision 
+        Vector3 collisionAvoidForce = SteerForce(data.avoidCollisionDir) * avoidCollisionWeight;
+        acceleration += collisionAvoidForce;
 
         // Seperation
         // Cohesion
         // Alignment
-        //Orientate();
+        // Orientate();
 
         // Calculate velocity given acceleration
         velocity += acceleration * Time.deltaTime;
 
+        // Clamp velocity's magnitude
         float speed = velocity.magnitude;
         speed = Mathf.Clamp(speed, minSpeed, maxSpeed);
         direction = velocity/speed;

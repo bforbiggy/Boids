@@ -48,31 +48,54 @@ public class BoidManager : MonoBehaviour
         {
             BoidData data = new BoidData();
 
+            Vector2 boidPos = boid.transform.position;
+            Vector2 direction = boid.direction != Vector3.zero ? boid.direction.normalized : Vector3.up;
+
             #region Collision Avoidance
             int signFlip = -1;
 
             // Pick first direction that doesn't collide with terrain
-            for (int i = 0; i < collisionDensity; i++)
+            for (int i = 0; i < 36; i++)
             {
                 // Vary angle with each raycast
                 float angleChange = signFlip * (i*10);
-                Vector3 direction = boid.direction;
                 direction = Quaternion.Euler(0f, 0f, angleChange) * direction;
 
                 // Check for collision
-                RaycastHit2D hit = Physics2D.Raycast(boid.transform.position, direction, Mathf.Infinity, envMask);
+                RaycastHit2D hit = Physics2D.Raycast(boidPos, direction, collisionScanRange, envMask);
 
                 // If chosen direction doesn't head to terrain, we pick said direction
                 if (hit.collider == null)
                 {
-                    Debug.DrawLine(boid.transform.position, boid.transform.position + direction, Color.white, 0.1f);
-                    data.avoidCollisionDir = boid.direction;
+                    Debug.DrawLine(boidPos, boidPos + direction, Color.white, 0.03f);
+                    data.avoidCollisionDir = direction;
                     break;
                 }
                 else
-                    Debug.DrawLine(boid.transform.position, boid.transform.position + direction, Color.red, 0.1f);
+                    Debug.DrawLine(boidPos, boidPos + direction, Color.red, 0.03f);
 
                 signFlip *= -1;
+            }
+            #endregion
+
+            #region Seperation
+            float closestDistance = Mathf.Infinity;
+            GameObject closestBoid = null;
+
+            // Finds the closest boid
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(boid.transform.position, 2f, direction);
+            for(int i = 0; i < hits.Length; i++)
+            {
+                GameObject detectedBoid = hits[i].collider.gameObject;
+                if(detectedBoid.tag == "Player" && !detectedBoid.Equals(boid.gameObject))
+                {
+                    float difference = Vector2.Distance(boidPos, detectedBoid.transform.position);
+                    if(difference < closestDistance)
+                    {
+                        closestDistance = difference;
+                        closestBoid = detectedBoid;
+                    }
+                }
             }
             #endregion
 

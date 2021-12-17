@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool flipX;
+    public bool flipY;
+    
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
+        Transform boidTransform = other.gameObject.transform;
+        boidTransform.position += new Vector3(flipX ? -2*boidTransform.position.x : 0f, flipY ? -2*boidTransform.position.y : 0f, 0f);
     }
 }
