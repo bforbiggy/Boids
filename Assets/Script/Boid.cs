@@ -8,6 +8,7 @@ public class Boid : MonoBehaviour
     public class BoidData
     {
         public Vector3 avoidCollisionDir;
+        public Vector3 closestBoidPos;
     }
     public BoidData data = null;
     private Collider m_collider;
@@ -44,6 +45,10 @@ public class Boid : MonoBehaviour
         acceleration += collisionAvoidForce;
 
         // Seperation
+        Vector3 seperationDirection = data.closestBoidPos - transform.position;
+        seperationDirection = Quaternion.Euler(0f, 0f, 180) * seperationDirection;
+        acceleration += SteerForce(seperationDirection);
+
         // Cohesion
         // Alignment
         // Orientate();

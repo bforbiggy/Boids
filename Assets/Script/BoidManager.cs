@@ -80,12 +80,13 @@ public class BoidManager : MonoBehaviour
 
             #region Seperation
             float closestDistance = Mathf.Infinity;
-            GameObject closestBoid = null;
+            data.closestBoidPos = Vector3.zero;
 
             // Finds the closest boid
             RaycastHit2D[] hits = Physics2D.CircleCastAll(boid.transform.position, 2f, direction);
             for(int i = 0; i < hits.Length; i++)
             {
+                // Make sure hit object is a boid
                 GameObject detectedBoid = hits[i].collider.gameObject;
                 if(detectedBoid.tag == "Player" && !detectedBoid.Equals(boid.gameObject))
                 {
@@ -93,7 +94,7 @@ public class BoidManager : MonoBehaviour
                     if(difference < closestDistance)
                     {
                         closestDistance = difference;
-                        closestBoid = detectedBoid;
+                        data.closestBoidPos = detectedBoid.transform.position;
                     }
                 }
             }
